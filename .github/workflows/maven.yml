@@ -33,5 +33,12 @@ jobs:
           echo "Starting application..."
           java -jar target/*.jar &
           sleep 15
-          echo "Calling API..."
-          curl http://localhost:8080/employees || true
+
+          echo "Printing logs..."
+          cat app.log || true
+
+      - name: Upload Logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: application-logs
+          path: app.log
