@@ -21,4 +21,14 @@ public class EmployeeService {
     public List<Employee> getAll() {
         return repo.findAll();
     }
+    
+    public Employee update(Long id, Employee emp) {
+        Employee existing = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employee not found with id: " + id));
+
+        existing.setName(emp.getName());
+        existing.setRole(emp.getRole());
+
+        return repo.save(existing);
+    }
 }
