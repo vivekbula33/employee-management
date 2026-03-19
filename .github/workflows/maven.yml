@@ -1,4 +1,4 @@
-name: Java CI with Maven
+name: Java CI/CD with Maven
 
 on:
   push:
@@ -9,20 +9,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        cache: maven
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
 
-    - name: Build with Maven
-      run: mvn clean package
+      - name: Build with Maven
+        run: mvn clean package
 
-    - name: Upload JAR Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: employee-app
-        path: target/*.jar
+      - name: Upload JAR Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: employee-app
+          path: target/*.jar
+
+      - name: Run Application (CD Simulation)
+        run: |
+          echo "Starting application..."
+          java -jar target/*.jar &
+          sleep 15
+          echo "Calling API..."
+          curl http://localhost:8080/employees || true
