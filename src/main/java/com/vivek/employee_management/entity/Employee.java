@@ -1,15 +1,19 @@
 package com.vivek.employee_management.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class Employee {
 
-    @Id
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Name cannot be empty")
     private String name;
+
+    @NotBlank(message = "Role cannot be empty")
     private String role;
 
     // Getters & Setters
