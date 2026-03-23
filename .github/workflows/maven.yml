@@ -1,4 +1,4 @@
-name: Java CI/CD with Maven
+name: Java CI/CD with Maven + Docker
 
 on:
   push:
@@ -31,7 +31,7 @@ jobs:
       - name: Run Application (CD Simulation)
         run: |
           echo "Starting application..."
-          java -jar target/*.jar &
+          java -jar target/*.jar > app.log 2>&1 &
           sleep 15
 
           echo "Printing logs..."
@@ -42,3 +42,16 @@ jobs:
         with:
           name: application-logs
           path: app.log
+
+      # -------------------------------
+      # 🚀 DOCKER STEPS START HERE
+      # -------------------------------
+
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build Docker Image
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/employee-app .
+
+      - name: Push Docker Image
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/employee-app
